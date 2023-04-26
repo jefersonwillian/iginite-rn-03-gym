@@ -4,7 +4,8 @@ import {
   Roboto_400Regular,
   Roboto_700Bold
 } from '@expo-google-fonts/roboto';
-import { NativeBaseProvider } from 'native-base';
+import { Center, NativeBaseProvider } from 'native-base';
+import { Loading } from '@components/Loading';
 
 export default function App() {
   const [fontsLoaded] = useFonts({ Roboto_400Regular, Roboto_700Bold });
@@ -18,7 +19,7 @@ export default function App() {
         translucent
       />
       
-      {fontsLoaded ? <Text>Hello World</Text> : <View />}
+      {fontsLoaded ? <Center style={{flex: 1}}>Hello World</Center> : <Loading />}
     </NativeBaseProvider>
   );
 }
