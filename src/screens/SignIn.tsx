@@ -1,4 +1,4 @@
-import { VStack, Image, Text,Center, Heading } from "native-base";
+import { VStack, Image, Text, Center, Heading } from "native-base";
 
 import BackgroundImg from '@assets/background.png';
 import LogoSvg from '@assets/logo.svg';
@@ -27,20 +27,23 @@ export function SignIn() {
                 <Heading color="gray.100" fontSize="xl" mb={6} fontFamily="heading">
                     Acesse a conta
                 </Heading>
+
+
+                <Input
+                    placeholder="E-mail"
+                    keyboardType="email-address"
+                    autoCapitalize="none"
+
+                />
+                <Input
+                    placeholder="Senha"
+                    secureTextEntry
+                />
+
+                <Button title="Acessar" />
             </Center>
-
-            <Input
-                placeholder="E-mail"
-                keyboardType="email-address"
-                autoCapitalize="none"
-
-            />
-            <Input
-                placeholder="Senha"
-                secureTextEntry
-            />
-
-            <Button title="Acessar" />
+            
+            <Button title="Criar Conta" variant="outline" />
         </VStack>
     );
 }
