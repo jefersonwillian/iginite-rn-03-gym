@@ -1,3 +1,4 @@
+import { Input } from '@components/Input';
 import { ScreenHeader } from '@components/ScreenHeader';
 import { UserPhoto } from '@components/UserPhoto';
 import { Center, ScrollView, Skeleton, Text, VStack } from 'native-base';
@@ -36,6 +37,18 @@ export function Profile() {
                             Alterar Foto
                         </Text>
                     </TouchableOpacity>
+
+                    <Input
+                        bg="gray.600"
+                        placeholder='Nome'
+                        value='Jeferson Willian Carvalho'
+                    />
+
+                    <Input
+                        bg="gray.600"
+                        placeholder="E-mail"
+                        isDisabled
+                    />
                 </Center>
             </ScrollView>
         </VStack>
