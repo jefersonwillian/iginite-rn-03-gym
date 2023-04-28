@@ -22,7 +22,7 @@ export function ExerciseCard({ ...rest }: Props) {
                 />
 
                 <VStack flex={1}>
-                    <Heading fontSize="lg" color="white">
+                    <Heading fontSize="lg" color="white" numberOfLines={1}>
                         Remanda unilateral
                     </Heading>
 
@@ -35,6 +35,7 @@ export function ExerciseCard({ ...rest }: Props) {
                     as={Entypo}
                     name="chevron-thin-right"
                     color="gray.300"
+                    ml={5}
                 />
             </HStack>
         </TouchableOpacity>
