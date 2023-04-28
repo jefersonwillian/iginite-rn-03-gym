@@ -5,7 +5,7 @@ import { FlatList, HStack, Heading, VStack, Text } from 'native-base';
 import { useState } from 'react';
 
 export function Home() {
-    const [groupSelected, setGroupSelected] = useState('costa');
+    const [groupSelected, setGroupSelected] = useState('Costas');
     const [groups, setGroups] = useState(['Costas', 'Bíceps', 'Tríceps', 'ombro'])
     return (
         <VStack flex={1}>
