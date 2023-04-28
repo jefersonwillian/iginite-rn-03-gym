@@ -8,6 +8,8 @@ export function Home() {
             <HomeHeader />
 
             <Group name="Costas" />
+
+            <Group name="Costas 1" />
         </VStack>
     );
 }
