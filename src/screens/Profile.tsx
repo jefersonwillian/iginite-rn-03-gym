@@ -1,11 +1,14 @@
+import { useState } from 'react';
+import { TouchableOpacity } from 'react-native';
+import { Center, Heading, ScrollView, Skeleton, Text, VStack } from 'native-base';
+
 import { Button } from '@components/Button';
 import { Input } from '@components/Input';
 import { ScreenHeader } from '@components/ScreenHeader';
 import { UserPhoto } from '@components/UserPhoto';
-import { Center, Heading, ScrollView, Skeleton, Text, VStack } from 'native-base';
-import { useState } from 'react';
-import { TouchableOpacity } from 'react-native';
+
 import * as ImagePicker from 'expo-image-picker';
+import * as FileSystem from 'expo-file-system';
 
 const PHOTO_SIZE = 33;
 
@@ -28,6 +31,9 @@ export function Profile() {
             }
 
             if (photoSelected.assets.length) {
+                const photoInfo = await FileSystem.getInfoAsync(photoSelected.assets[0].uri);
+                console.log(photoInfo);
+
                 setUserPhoto(photoSelected.assets[0].uri);
             }
         } catch (error) {
