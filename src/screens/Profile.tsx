@@ -15,20 +15,26 @@ export function Profile() {
 
     async function handleUserPhotoSelected() {
         setPhotoIsLoading(true);
-        const photoSelected =  await ImagePicker.launchImageLibraryAsync({
-            mediaTypes: ImagePicker.MediaTypeOptions.Images,
-            quality: 1,
-            aspect: [4, 4],
-            allowsEditing: true
-        }).finally(() => {
+        try {
+            const photoSelected = await ImagePicker.launchImageLibraryAsync({
+                mediaTypes: ImagePicker.MediaTypeOptions.Images,
+                quality: 1,
+                aspect: [4, 4],
+                allowsEditing: true
+            })
+
+            if (photoSelected.canceled) {
+                return;
+            }
+
+            if (photoSelected.assets.length) {
+                setUserPhoto(photoSelected.assets[0].uri);
+            }
+        } catch (error) {
+            console.log("error:", error);
+        } finally {
             setPhotoIsLoading(false);
-        })
-
-        if (photoSelected.canceled) {
-            return;
         }
-
-        setUserPhoto(photoSelected.assets[0].uri);
     }
 
     return (
