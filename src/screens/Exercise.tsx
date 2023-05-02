@@ -1,4 +1,4 @@
-import { Center, HStack, Heading, Text } from 'native-base';
+import { Center, HStack, Heading, Text, Image } from 'native-base';
 import { TouchableOpacity } from 'react-native';
 import { Icon, VStack } from 'native-base';
 import { Feather } from '@expo/vector-icons';
@@ -40,6 +40,18 @@ export function Exercise() {
                         </Text>
                     </HStack>
                 </HStack>
+            </VStack>
+
+            <VStack p={8}>
+                <Image
+                    w="full"
+                    h={80}
+                    source={{ uri: 'https://cdn.fisiculturismo.com.br/monthly_2017_03/puxada-pela-frente-pronada-final-media.jpg.08db59d9f9355297aebe54ee8b981953.jpg' }}
+                    alt="Nome do exercício"
+                    mb={3}
+                    resizeMode="cover"
+                    rounded="lg"
+                />
             </VStack>
         </VStack>
     );
