@@ -1,15 +1,15 @@
 import { useNavigation } from "@react-navigation/native";
-import { VStack, Image, Text, Center, Heading, ScrollView } from "native-base";
-import { useForm, Controller } from 'react-hook-form';
+import { Center, Heading, Image, ScrollView, Text, VStack } from "native-base";
+import { Controller, useForm } from 'react-hook-form';
 
-import LogoSvg from '@assets/logo.svg';
 import BackgroundImg from '@assets/background.png';
+import LogoSvg from '@assets/logo.svg';
 
-import { Input } from "@components/Input";
 import { Button } from "@components/Button";
+import { Input } from "@components/Input";
 
-import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
 
 type FormDataProps = {
     name: string;
@@ -21,7 +21,12 @@ type FormDataProps = {
 const signUpSchema = yup.object({
     name: yup.string().required('Informe o nome'),
     email: yup.string().required('Informe o e-mail').email('E-mail inválido'),
-    password: yup.string().required('Informe a senha').min(6, 'A senha deve ter pelo menos 6 dígitos.'),
+    password: yup.string()
+        .required('Informe a senha')
+        .min(6, 'A senha deve ter pelo menos 6 dígitos.')
+        .matches(/[A-Z]/, 'A senha deve conter pelo menos uma letra maiúscula')
+        .matches(/[\W_]/, 'A senha deve conter pelo menos um caractere especial'),
+    password_confirm: yup.string().required('Confirme a senha.').oneOf([yup.ref('password'), ''], 'A confirmação da senha não confere')
 });
 
 export function SignUp() {
@@ -117,6 +122,7 @@ export function SignUp() {
                                 value={value}
                                 onSubmitEditing={handleSubmit(handleSignUp)}
                                 returnKeyType="send"
+                                errorMessage={errors.password_confirm?.message}
                             />
                         )}
                     />
