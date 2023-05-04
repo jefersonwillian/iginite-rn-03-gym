@@ -13,6 +13,7 @@ import * as yup from 'yup';
 import { api } from "@services/api";
 import axios from "axios";
 import { Alert } from "react-native";
+import { useState } from "react";
 
 type FormDataProps = {
     name: string;
@@ -33,6 +34,7 @@ const signUpSchema = yup.object({
 });
 
 export function SignUp() {
+    const [loading, setLoading] = useState(false);
 
     const { control, handleSubmit, formState: { errors } } = useForm<FormDataProps>({
         resolver: yupResolver(signUpSchema),
@@ -45,6 +47,7 @@ export function SignUp() {
     }
 
     async function handleSignUp({ name, email, password }: FormDataProps) {
+        setLoading(true);
         try {
             const response = await api.post('/users', { name, email, password });
             console.log(response.data);
@@ -52,6 +55,8 @@ export function SignUp() {
             if (axios.isAxiosError(error)) {
                 Alert.alert(error.response?.data.message);
             }
+        } finally {
+            setLoading(false);
         }
     }
 
@@ -140,6 +145,7 @@ export function SignUp() {
                     <Button
                         title="Criar e acessar"
                         onPress={handleSubmit(handleSignUp)}
+                        loading={loading}
                     />
                 </Center>
 
