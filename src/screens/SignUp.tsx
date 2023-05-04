@@ -1,5 +1,5 @@
 import { useNavigation } from "@react-navigation/native";
-import { Center, Heading, Image, ScrollView, Text, VStack } from "native-base";
+import { Center, Heading, Image, ScrollView, Text, VStack, useToast } from "native-base";
 import { Controller, useForm } from 'react-hook-form';
 
 import BackgroundImg from '@assets/background.png';
@@ -14,6 +14,7 @@ import { api } from "@services/api";
 import axios from "axios";
 import { Alert } from "react-native";
 import { useState } from "react";
+import { AppError } from "@utils/AppError";
 
 type FormDataProps = {
     name: string;
@@ -42,6 +43,8 @@ export function SignUp() {
 
     const navigation = useNavigation();
 
+    const toast = useToast();
+    
     function handleGoBack() {
         navigation.goBack();
     }
@@ -52,9 +55,15 @@ export function SignUp() {
             const response = await api.post('/users', { name, email, password });
             console.log(response.data);
         } catch (error) {
-            if (axios.isAxiosError(error)) {
-                Alert.alert(error.response?.data.message);
-            }
+            const isAppError = error instanceof AppError;
+
+            const title = isAppError ? error.message : 'Não foi possível criar a conta. Tente novamente mais tarde';
+
+            toast.show({
+                title,
+                placement: 'top',
+                bgColor: 'red.500'
+            })
         } finally {
             setLoading(false);
         }
