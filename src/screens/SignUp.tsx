@@ -1,20 +1,21 @@
+import { useState } from "react";
+
 import { useNavigation } from "@react-navigation/native";
 import { Center, Heading, Image, ScrollView, Text, VStack, useToast } from "native-base";
-import { Controller, useForm } from 'react-hook-form';
 
+import { Controller, useForm } from 'react-hook-form';
+import * as yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
 import BackgroundImg from '@assets/background.png';
 import LogoSvg from '@assets/logo.svg';
 
 import { Button } from "@components/Button";
 import { Input } from "@components/Input";
 
-import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
 import { api } from "@services/api";
-import axios from "axios";
-import { Alert } from "react-native";
-import { useState } from "react";
+
 import { AppError } from "@utils/AppError";
+
 
 type FormDataProps = {
     name: string;
