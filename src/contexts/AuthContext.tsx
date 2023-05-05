@@ -3,6 +3,7 @@ import { ReactNode, createContext, useState } from "react";
 
 export type AuthContextDataProps = {
     user: UserDTO;
+    singIn: (email: string, password: string) => void;
 }
 
 type AuthContextProviderProps = {
@@ -14,6 +15,15 @@ export const AuthContext = createContext<AuthContextDataProps>({} as AuthContext
 
 export function AuthContextProvider({ children }: AuthContextProviderProps) {
 
+    function singIn(email: string, password: string) {
+        setUser({
+            id: '',
+            name: '',
+            email,
+            avatar: '',
+        })
+    }
+
     const [user, setUser] = useState({
         id: '1',
         name: 'Jeferson Carvalho',
@@ -22,7 +32,7 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
     })
     
     return (
-        <AuthContext.Provider value={{user}}>
+        <AuthContext.Provider value={{ user, singIn }}>
             {children}
         </AuthContext.Provider>
     )
