@@ -52,6 +52,7 @@ export function SignUp() {
 
     async function handleSignUp({ name, email, password }: FormDataProps) {
         setLoading(true);
+    
         try {
             const response = await api.post('/users', { name, email, password });
             console.log(response.data);
@@ -115,6 +116,7 @@ export function SignUp() {
                                 placeholder="E-mail"
                                 keyboardType="email-address"
                                 autoCapitalize="none"
+                                autoComplete="off"
                                 onChangeText={onChange}
                                 value={value}
                                 errorMessage={errors.email?.message}
