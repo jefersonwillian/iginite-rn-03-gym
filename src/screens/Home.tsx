@@ -27,7 +27,9 @@ export function Home() {
         try {
             const response = await api.get('/groups');
             setGroups(response.data);
-
+            if (response.data.length) {
+                setGroupSelected(response.data[0])
+            }
         } catch (error) {
             const isAppError = error instanceof AppError;
             const title = isAppError ? error.message : 'Não foi possível carregar os grupos musculares';
@@ -44,7 +46,7 @@ export function Home() {
         try {
             const response = await api.get(`/exercises/bygroup/${groupSelected}`);
             setExercises(response.data);
-
+    
         } catch (error) {
             const isAppError = error instanceof AppError;
             const title = isAppError ? error.message : 'Não foi possível carregar os exercícios';
@@ -106,7 +108,7 @@ export function Home() {
                     data={exercises}
                     keyExtractor={item => item.id}
                     renderItem={({ item }) => (
-                        <ExerciseCard onPress={handleOpenExerciseDetails} />
+                        <ExerciseCard onPress={handleOpenExerciseDetails} data={item}/>
                     )}
                     showsVerticalScrollIndicator={false}
                     _contentContainerStyle={{
