@@ -18,6 +18,7 @@ export function Profile() {
     const [userPhoto, setUserPhoto] = useState('https://github.com/jefersonwillian.png');
 
     const toast = useToast();
+    
 
     async function handleUserPhotoSelected() {
         setPhotoIsLoading(true);

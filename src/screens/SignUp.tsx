@@ -15,6 +15,7 @@ import { Input } from "@components/Input";
 import { api } from "@services/api";
 
 import { AppError } from "@utils/AppError";
+import { useAuth } from "@hooks/useAuth";
 
 
 type FormDataProps = {
@@ -45,6 +46,7 @@ export function SignUp() {
     const navigation = useNavigation();
 
     const toast = useToast();
+    const { singIn } = useAuth();
     
     function handleGoBack() {
         navigation.goBack();
@@ -52,9 +54,10 @@ export function SignUp() {
 
     async function handleSignUp({ name, email, password }: FormDataProps) {
         setLoading(true);
+    
         try {
-            const response = await api.post('/users', { name, email, password });
-            console.log(response.data);
+            await api.post('/users', { name, email, password });
+            await singIn(email, password)
         } catch (error) {
             const isAppError = error instanceof AppError;
 
@@ -115,6 +118,7 @@ export function SignUp() {
                                 placeholder="E-mail"
                                 keyboardType="email-address"
                                 autoCapitalize="none"
+                                autoComplete="off"
                                 onChangeText={onChange}
                                 value={value}
                                 errorMessage={errors.email?.message}
