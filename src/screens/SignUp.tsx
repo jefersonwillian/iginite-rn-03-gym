@@ -155,7 +155,7 @@ export function SignUp() {
                     <Button
                         title="Criar e acessar"
                         onPress={handleSubmit(handleSignUp)}
-                        loading={loading}
+                        isLoading={loading}
                     />
                 </Center>
 

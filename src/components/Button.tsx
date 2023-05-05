@@ -3,10 +3,9 @@ import { Button as ButtonNativeBase, IButtonProps, Spinner, Text } from 'native-
 type Props = IButtonProps & {
     title: string;
     variant?: 'solid' | 'outline';
-    loading?: boolean;
 }
 
-export function Button({ title, variant = 'solid', loading = false, ...rest }: Props) {
+export function Button({ title, variant = 'solid', ...rest }: Props) {
     return (
         <ButtonNativeBase
             w="full"
@@ -20,17 +19,13 @@ export function Button({ title, variant = 'solid', loading = false, ...rest }: P
             }}
             {...rest}
         >
-            {
-                loading ?
-                    <Spinner color={variant === 'outline' ? 'green.500' : 'white'} /> :
-                    <Text
-                        color={variant === 'outline' ? 'green.500' : 'white'}
-                        fontFamily="heading"
-                        fontSize="sm"
-                    >
-                        {title}
-                    </Text>
-            }
+            <Text
+                color={variant === 'outline' ? 'green.500' : 'white'}
+                fontFamily="heading"
+                fontSize="sm"
+            >
+                {title}
+            </Text>
         </ButtonNativeBase>
     );
 }

@@ -47,8 +47,6 @@ export function SignIn() {
     }
 
     async function handleSignIn({ email, password }: FormData) {
-       
-
         setLoading(true);
         try {
             await singIn(email, password);
@@ -116,13 +114,15 @@ export function SignIn() {
                                 secureTextEntry
                                 onChangeText={onChange}
                                 errorMessage={errors.password?.message}
+                                onSubmitEditing={handleSubmit(handleSignIn)}
+                                returnKeyType="send"
                             />
                         )}
                     />
 
 
 
-                    <Button title="Acessar" onPress={handleSubmit(handleSignIn)} loading={loading} />
+                    <Button title="Acessar" onPress={handleSubmit(handleSignIn)} isLoading={loading} />
                 </Center>
 
 
