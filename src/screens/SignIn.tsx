@@ -1,19 +1,70 @@
-import { Center, Heading, Image, ScrollView, Text, VStack } from "native-base";
+import { Center, Heading, Image, ScrollView, Text, VStack, useToast } from "native-base";
+import { useNavigation } from "@react-navigation/native";
+
+import { Controller, useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from 'yup';
 
 import BackgroundImg from '@assets/background.png';
 import LogoSvg from '@assets/logo.svg';
+
 import { Button } from "@components/Button";
 import { Input } from "@components/Input";
-import { useNavigation } from "@react-navigation/native";
+
+
 import { AuthNavigatorRoutesProps } from "@routes/auth.routes";
+import { useAuth } from "@hooks/useAuth";
+import { useState } from "react";
+import { api } from "@services/api";
+import { AppError } from "@utils/AppError";
+
+
+type FormData = {
+    email: string;
+    password: string;
+}
+
+const signInSchema = yup.object({
+    email: yup.string().required('Informe o e-mail'),
+    password: yup.string().required('Informe a senha'),
+});
 
 export function SignIn() {
+    const { singIn } = useAuth();
+    
+    const toast = useToast();
+    
+    const [loading, setLoading] = useState(false);
+    
     const navigation = useNavigation<AuthNavigatorRoutesProps>();
+
+    const { control, handleSubmit, formState: { errors } } = useForm<FormData>({
+        resolver: yupResolver(signInSchema)
+    })
 
     function handleNewAccount() {
         navigation.navigate('signUp');
     }
-    
+
+    async function handleSignIn({ email, password }: FormData) {
+        setLoading(true);
+        try {
+            await singIn(email, password);
+        } catch (error) {
+            const isAppError = error instanceof AppError;
+
+            const title = isAppError ? error.message : 'Não foi possível entrar. Tente novamente mais tarde.';
+
+            toast.show({
+                title,
+                placement: 'top',
+                bgColor: 'red.500'
+            })
+        } finally {
+            setLoading(false);
+        }
+    }
+
     return (
         <ScrollView contentContainerStyle={{ flexGrow: 1 }} showsVerticalScrollIndicator={false}>
 
@@ -40,19 +91,38 @@ export function SignIn() {
                         Acesse a conta
                     </Heading>
 
-
-                    <Input
-                        placeholder="E-mail"
-                        keyboardType="email-address"
-                        autoCapitalize="none"
-
+                    <Controller
+                        control={control}
+                        name="email"
+                        render={({ field: { onChange } }) => (
+                            <Input
+                                placeholder="E-mail"
+                                keyboardType="email-address"
+                                autoCapitalize="none"
+                                onChangeText={onChange}
+                                errorMessage={errors.email?.message}
+                            />
+                        )}
                     />
-                    <Input
-                        placeholder="Senha"
-                        secureTextEntry
+
+                    <Controller
+                        control={control}
+                        name="password"
+                        render={({ field: { onChange } }) => (
+                            <Input
+                                placeholder="Senha"
+                                secureTextEntry
+                                onChangeText={onChange}
+                                errorMessage={errors.password?.message}
+                                onSubmitEditing={handleSubmit(handleSignIn)}
+                                returnKeyType="send"
+                            />
+                        )}
                     />
 
-                    <Button title="Acessar" />
+
+
+                    <Button title="Acessar" onPress={handleSubmit(handleSignIn)} isLoading={loading} />
                 </Center>
 
 
@@ -61,7 +131,7 @@ export function SignIn() {
                         Ainda não tem acesso?
                     </Text>
 
-                    <Button title="Criar Conta" variant="outline" onPress={handleNewAccount}/>
+                    <Button title="Criar Conta" variant="outline" onPress={handleNewAccount} />
                 </Center>
 
 

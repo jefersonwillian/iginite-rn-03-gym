@@ -1,15 +1,21 @@
-import { useNavigation } from "@react-navigation/native";
-import { Center, Heading, Image, ScrollView, Text, VStack } from "native-base";
-import { Controller, useForm } from 'react-hook-form';
+import { useState } from "react";
 
+import { useNavigation } from "@react-navigation/native";
+import { Center, Heading, Image, ScrollView, Text, VStack, useToast } from "native-base";
+
+import { Controller, useForm } from 'react-hook-form';
+import * as yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
 import BackgroundImg from '@assets/background.png';
 import LogoSvg from '@assets/logo.svg';
 
 import { Button } from "@components/Button";
 import { Input } from "@components/Input";
 
-import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
+import { api } from "@services/api";
+
+import { AppError } from "@utils/AppError";
+
 
 type FormDataProps = {
     name: string;
@@ -30,6 +36,7 @@ const signUpSchema = yup.object({
 });
 
 export function SignUp() {
+    const [loading, setLoading] = useState(false);
 
     const { control, handleSubmit, formState: { errors } } = useForm<FormDataProps>({
         resolver: yupResolver(signUpSchema),
@@ -37,12 +44,30 @@ export function SignUp() {
 
     const navigation = useNavigation();
 
+    const toast = useToast();
+    
     function handleGoBack() {
         navigation.goBack();
     }
 
-    function handleSignUp(data: any) {
-        console.log({ data });
+    async function handleSignUp({ name, email, password }: FormDataProps) {
+        setLoading(true);
+        try {
+            const response = await api.post('/users', { name, email, password });
+            console.log(response.data);
+        } catch (error) {
+            const isAppError = error instanceof AppError;
+
+            const title = isAppError ? error.message : 'Não foi possível criar a conta. Tente novamente mais tarde';
+
+            toast.show({
+                title,
+                placement: 'top',
+                bgColor: 'red.500'
+            })
+        } finally {
+            setLoading(false);
+        }
     }
 
     return (
@@ -130,6 +155,7 @@ export function SignUp() {
                     <Button
                         title="Criar e acessar"
                         onPress={handleSubmit(handleSignUp)}
+                        isLoading={loading}
                     />
                 </Center>
 
