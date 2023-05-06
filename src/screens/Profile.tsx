@@ -10,6 +10,16 @@ import { UserPhoto } from '@components/UserPhoto';
 import * as ImagePicker from 'expo-image-picker';
 import * as FileSystem from 'expo-file-system';
 import { FileInfo } from 'expo-file-system';
+import { useAuth } from '@hooks/useAuth';
+import { Controller, useForm } from 'react-hook-form';
+
+type FormDataProps = {
+    name: string;
+    email: string;
+    password: string;
+    oldPassword: string;
+    newPassword: string;
+}
 
 const PHOTO_SIZE = 33;
 
@@ -18,8 +28,14 @@ export function Profile() {
     const [userPhoto, setUserPhoto] = useState('https://github.com/jefersonwillian.png');
 
     const toast = useToast();
+    const { user } = useAuth();
+    const { control } = useForm<FormDataProps>({
+        defaultValues: {
+            name: user.name,
+            email: user.email
+        }
+    });
     
-
     async function handleUserPhotoSelected() {
         setPhotoIsLoading(true);
         try {
@@ -86,17 +102,31 @@ export function Profile() {
                         </Text>
                     </TouchableOpacity>
 
-                    <Input
-                        bg="gray.600"
-                        placeholder='Nome'
-                        value='Jeferson Willian Carvalho'
+                    <Controller
+                        control={control}
+                        name="name"
+                        render={({ field: { value, onChange } }) => (
+                            <Input
+                                bg="gray.600"
+                                placeholder='Nome'
+                                onChangeText={onChange}
+                                value={value}
+                            />
+                        )}
                     />
 
-                    <Input
-                        bg="gray.600"
-                        placeholder="E-mail"
-                        value='jeferson.wc@outlook.com'
-                        isDisabled
+                    <Controller
+                        control={control}
+                        name="email"
+                        render={({ field: { value, onChange } }) => (
+                            <Input
+                                bg="gray.600"
+                                placeholder="E-mail"
+                                isDisabled
+                                onChangeText={onChange}
+                                value={value}
+                            />
+                        )}
                     />
                 </Center>
                 <VStack px={10} mt={12} mb={9}>
