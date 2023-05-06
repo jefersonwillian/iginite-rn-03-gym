@@ -42,7 +42,6 @@ export function Exercise() {
             setIsLoading(true);
             const response = await api.get(`/exercises/${exerciseId}`);
 
-            console.log("🚀 ~ file: Exercise.tsx:41 ~ fetchExerciseDetails ~ response:", response.data)
             setExercise(response.data);
 
         } catch (error) {
@@ -73,7 +72,6 @@ export function Exercise() {
 
             navigation.navigate('history');
         } catch (error) {
-            console.log("🚀 ~ file: Exercise.tsx:76 ~ handleExerciseHistoryRegister ~ error:", error)
             const isAppError = error instanceof AppError;
             const title = isAppError ? error.message : 'Não foi possível registrar exercício.';
 
@@ -130,7 +128,6 @@ export function Exercise() {
                                 resizeMode="cover"
                                 rounded="lg"
                             />
-                            {console.log(exercise?.demo)}
                         </Box>
 
                         <Box bg="gray.600" rounded="md" pb={4} px={4}>
