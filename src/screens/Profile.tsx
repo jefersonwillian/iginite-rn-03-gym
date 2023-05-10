@@ -146,7 +146,11 @@ export function Profile() {
                 bgColor: 'red.500'
             })
         } finally {
-            setPhotoIsLoading(false);
+            setTimeout(() => {
+                toast.closeAll();
+                setPhotoIsLoading(false);
+            }, 2000);
+          
         }
     }
 
