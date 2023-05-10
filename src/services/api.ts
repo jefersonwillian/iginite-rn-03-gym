@@ -15,11 +15,23 @@ const api = axios.create({
 api.registerInterceptTokenManager = (singOut) => {
   const interceptTokenManager = api.interceptors.response.use(
     (response) => response,
-    (error) => {
-      if (error.response && error.response.data) {
-        return Promise.reject(new AppError(error.response.data.message));
+    (requestError) => {
+      if (requestError.response?.status === 401) {
+        if (
+          requestError.response.data?.message === "token.expired" ||
+          requestError.response.data?.message === "token.invalid"
+        ) {
+          // Sessão expirada. Faça seu login novamente
+        }
+
+        singOut();
+      }
+
+
+      if (requestError.response && requestError.response.data) {
+        return Promise.reject(new AppError(requestError.response.data.message));
       } else {
-        return Promise.reject(error);
+        return Promise.reject(requestError);
       }
     }
   );
