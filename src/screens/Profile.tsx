@@ -60,9 +60,7 @@ const PHOTO_SIZE = 33;
 
 export function Profile() {
     const [photoIsLoading, setPhotoIsLoading] = useState(false);
-    const [userPhoto, setUserPhoto] = useState(
-        "https://github.com/jefersonwillian.png"
-    );
+    
     const [isUpdating, setIsUpdating] = useState(false);
 
     const toast = useToast();
@@ -104,7 +102,6 @@ export function Profile() {
                         title: "Essa imagem é muito grande. Escolha uma de até 5MB.",
                         placement: "top",
                         bgColor: "red.500",
-                        duration: 5000,
                     });
                 }
 
@@ -140,7 +137,14 @@ export function Profile() {
                 })
             }
         } catch (error) {
-            console.log("error:", error);
+            const isAppError = error instanceof AppError;
+            const title = isAppError ? error.message : 'Não foi possível atualizar a foto. Tente novamente mais tarde.';
+
+            toast.show({
+                title,
+                placement: 'top',
+                bgColor: 'red.500'
+            })
         } finally {
             setPhotoIsLoading(false);
         }
